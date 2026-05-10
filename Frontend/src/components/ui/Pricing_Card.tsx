@@ -1,9 +1,10 @@
+const PricingCard = ({ data }: { data: any }) => {
 
-import React from 'react';
-const PricingCard = ({ data }) => {
+    const hasMonthly = data?.price_monthly != null;
+    const hasTokenPricing = data?.input_per_1M != null || data?.output_per_1M != null;
+
     return (
-        // Main background wrapper (mimicking the image's background)
-        <div className="bg-amber-50 rounded-2xl p-6 w-72 flex flex-col gap-4">
+        <div className="rounded-2xl p-6 w-72 flex flex-col gap-4">
 
             {/* Top row */}
             <div className="flex items-center justify-between">
@@ -17,20 +18,40 @@ const PricingCard = ({ data }) => {
             </div>
 
             {/* Price */}
-            <div className="flex items-end gap-1">
-                <span className="text-5xl font-bold">{data?.price_monthly == null ? "No-Data" : data.price_monthly}</span>
-                <span className="text-[#918e86] text-sm mb-2">/mo</span>
-            </div>
+            {hasMonthly ? (
+                // ── Monthly price
+                <div className="flex items-end gap-1">
+                    <span className="text-5xl font-bold">${data.price_monthly}</span>
+                    <span className="text-[#918e86] text-sm mb-2">/mo</span>
+                </div>
+            ) : hasTokenPricing ? (
+                // ── Token pricing
+                <div className="flex flex-col gap-1">
+                    {data?.input_per_1M != null && (
+                        <div className="flex items-end gap-1">
+                            <span className="text-3xl font-bold">${data.input_per_1M}</span>
+                            <span className="text-[#918e86] text-xs mb-1.5">/ 1M tokens sent</span>
+                        </div>
+                    )}
+                    {data?.output_per_1M != null && (
+                        <div className="flex items-end gap-1">
+                            <span className="text-3xl font-bold">${data.output_per_1M}</span>
+                            <span className="text-[#918e86] text-xs mb-1.5">/ 1M tokens received</span>
+                        </div>
+                    )}
+                </div>
+            ) : (
+                // ── No pricing data
+                <div className="flex items-end gap-1">
+                    <span className="text-3xl font-bold">Custom</span>
+                    <span className="text-[#918e86] text-sm mb-2">pricing</span>
+                </div>
+            )}
 
-            {/* Features */}
+            {/* Notes */}
             <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2 text-sm">
-                    <span>{data.notes}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                    <span>{data?.input_per_1M}</span>
-                </div> <div className="flex items-center gap-2 text-sm">
-                    <span>{data?.output_per_1M}</span>
+                    <span>{data?.notes}</span>
                 </div>
             </div>
 

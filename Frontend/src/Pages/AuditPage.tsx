@@ -16,19 +16,19 @@ const AuditPage = () => {
         <div className="h-screen flex justify-center">
             <div className="w-2/3 my-5">
                 <form >
-                    {models?.map((i:any)=>(
+                    {models?.map((i: any) => (
                         <div className="flex gap-10 p-2 items-center">
-                            <div className="flex gap-2 flex-col bg-amber-50  w-28 h-28 items-center justify-center p-2 rounded-2xl text-center">
-                                <div><img src={i.image} className={`${i.product=="OpenAI API" || i.product === "ChatGPT" ? "w-16" : "w-10"}`} /></div>
+                            <div className="flex gap-2 flex-col bg-[#fcf5cc]  w-28 h-28 items-center justify-center p-2 rounded-2xl text-center">
+                                <div><img src={i.image} className={`${i.product == "OpenAI API" || i.product === "ChatGPT" ? "w-16" : "w-10"}`} /></div>
                                 <div>{i.product}</div>
                             </div>
                             <div className="flex gap-5 items-center overflow-x-scroll">
-                                {i.plans?.map((j:any)=>(
-                                    <div>
-                                        <label htmlFor={j.name}>
-                                            <PricingCard data={j}/>
+                                {i.plans?.map((j: any) => (
+                                    <div key={j.name} className="relative">
+                                        <input type="checkbox" className="peer hidden" value={JSON.stringify({ model: i.product, plan: j.name, price_monthly: j.price_monthly ?? "Custom" })} id={j.name}  {...register("selected_plans")} />
+                                        <label className="cursor-pointer peer-checked:text-white transition-all duration-300 peer-checked:bg-blue-600 block bg-[#fcf5cc]  rounded-2xl" htmlFor={j.name}>
+                                            <PricingCard data={j} />
                                         </label>
-                                        <input type="checkbox" id={j.name} />
                                     </div>
                                 ))}
                             </div>
