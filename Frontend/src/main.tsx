@@ -5,6 +5,7 @@ import App from './App.tsx'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Home from './Pages/Home.tsx'
 import AuditPage from './Pages/AuditPage.tsx'
+import FinalPage from './Pages/FinalPage.tsx'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         path:'/auditPage',
         element:<AuditPage/>
+      },
+            {
+        path:'/Result',
+        element:<FinalPage/>
       }
     ]
   }

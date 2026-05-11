@@ -5,5 +5,5 @@ export const model_api_data = (req, res) => {
 };
 
 export const plan_Data = (req,res)=>{
-  const selected_plans = req.body  
+  const selected_plans = req.body;
 }

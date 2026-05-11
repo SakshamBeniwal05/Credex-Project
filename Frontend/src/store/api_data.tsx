@@ -18,7 +18,9 @@ export const api_data_store = create<ModelStore>((set, get) => ({
     },
     auditor: async (data: any) => {
         const selected_plans = (data.selected_plans || []).map((item: string) => JSON.parse(item));
-        console.log(selected_plans);
-        window.print();
+        const {primary_use, team_size} = data
+
+        console.log(selected_plans,primary_use,team_size);
+        // window.print();
     }
 }))
