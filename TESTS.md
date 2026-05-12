@@ -2,7 +2,7 @@
 
 ## Overview
 
-Credex uses manual testing during development due to the rapid MVP iteration pace. This document describes the test cases, manual testing approach, and future automated testing strategy.
+Logo uses manual testing during development due to the rapid MVP iteration pace. This document describes the test cases, manual testing approach, and future automated testing strategy.
 
 **Current Status:** 100% manual testing completed with real-world data and mock scenarios.  
 **Test Coverage:** All major user flows validated; edge cases identified and resolved.  
@@ -662,4 +662,4 @@ npm run test:coverage && open coverage/index.html
 
 ## Conclusion
 
-Credex currently relies on manual testing with comprehensive scenarios covering happy paths, edge cases, and error states. All major features have been validated with real-world data. The planned automated test suite will provide regression protection and enable confident future development.
+Logo currently relies on manual testing with comprehensive scenarios covering happy paths, edge cases, and error states. All major features have been validated with real-world data. The planned automated test suite will provide regression protection and enable confident future development.

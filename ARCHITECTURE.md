@@ -2,7 +2,7 @@
 
 ## System Overview
 
-Credex is an AI infrastructure audit platform that helps teams optimize their AI tool subscriptions. The system analyzes selected AI tools, team size, and use case, then provides an audit score and personalized optimization recommendations using Google Gemini.
+Logo is an AI infrastructure audit platform that helps teams optimize their AI tool subscriptions. The system analyzes selected AI tools, team size, and use case, then provides an audit score and personalized optimization recommendations using Google Gemini.
 
 ## System Diagram
 

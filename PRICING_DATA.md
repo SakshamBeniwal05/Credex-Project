@@ -1,6 +1,6 @@
 # Pricing Data Sources
 
-All pricing data in Credex comes from official vendor sources. This document lists the sources and verification dates.
+All pricing data in Logo comes from official vendor sources. This document lists the sources and verification dates.
 
 ## Data Verification
 
@@ -139,7 +139,7 @@ Pricing per 1 million tokens (input | output):
 
 ---
 
-## Using This Data in Credex
+## Using This Data in Logo
 
 The [Backend/src/api/model_api_data.js](Backend/src/api/model_api_data.js) file contains the above pricing data in JSON format. When users run an audit:
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Credex uses Google Gemini for intelligent AI spend analysis. This document details the system prompt, how it was developed, and what alternatives were considered.
+Logo uses Google Gemini for intelligent AI spend analysis. This document details the system prompt, how it was developed, and what alternatives were considered.
 
 ---
 
@@ -346,7 +346,7 @@ describe("Gemini audit engine", () => {
 
 ## Conclusion
 
-Credex uses Google Gemini 1.5 Flash as its AI backbone. The production prompt balances:
+Logo uses Google Gemini 1.5 Flash as its AI backbone. The production prompt balances:
 - **Cost:** Free tier enables MVP
 - **Quality:** 94% first-attempt success with structured JSON
 - **Speed:** 2-4 second responses maintain good UX

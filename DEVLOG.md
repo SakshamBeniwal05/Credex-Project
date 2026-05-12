@@ -81,53 +81,164 @@
 
 ---
 
-## Day 6 — 2025-05-12 (Monday, afternoon)
-**Hours worked:** 7  
-**What I did:**
-- Debugged critical Supabase URL bug: Backend was passing full path (`https://projectname.supabase.co/rest/v1/...`) instead of just project URL (`https://projectname.supabase.co`) to Supabase.create()
-  - **Bug discovery process:** Audit was inserting successfully but fetch was returning no results. Tested with direct Supabase client calls. Realized the URL was malformed.
-  - **Hypothesis tested:** Changed parameter from `SUPABASE_URL` in route handlers to just `process.env.SUPABASE_URL` in client initialization
-  - **Resolution:** Fixed and verified audit insertion + retrieval now works end-to-end
-- Built complete frontend with TypeScript for type safety:
-  - AuditPage.tsx: Form component with model selection, team size, use case inputs using React Hook Form
-  - FinalPage.tsx: Results display with score-based coloring (green/blue/amber/orange/red)
-  - Pricing_Card.tsx: Reusable component for pricing plan display
-  - Zustand store (api_data.tsx): Type-safe state management with async methods
-- Created centralized type definitions (types/index.ts) with 10 interfaces covering all data flows
-- Implemented localStorage persistence for form data recovery
-- Fixed type errors: Button disabled logic, missing AuditResult properties, unused variables
+## Day 6 — 2025-05-12 (Monday)
 
-**What I learned:**
-- The importance of parameter naming in library APIs (Supabase.create() expects just URL, not full path)
+### Session 1 — 12:00 AM to 8:00 AM  
+**Hours worked:** 8
+
+### Session 2 — 2:00 PM to 10:00 PM  
+**Hours worked:** 8
+
+### Total Hours Worked: 16
+
+---
+
+## What I did:
+
+### Backend Debugging & Supabase Fixes
+- Debugged critical Supabase URL bug:
+  - Backend was passing full REST path:
+    ```txt
+    https://projectname.supabase.co/rest/v1/...
+    ```
+    instead of only:
+    ```txt
+    https://projectname.supabase.co
+    ```
+    into `Supabase.createClient()`
+
+- **Bug discovery process:**
+  - Audit insertion was working correctly
+  - Fetch operations were returning empty results with no explicit error
+  - Tested direct Supabase client queries independently
+  - Traced issue to malformed client initialization URL
+
+- **Hypothesis tested:**
+  - Replaced incorrect URL handling with proper `process.env.SUPABASE_URL`
+  - Reinitialized client using only the project base URL
+
+- **Resolution:**
+  - Successfully fixed audit insertion + retrieval flow
+  - Verified complete end-to-end database operations
+
+---
+
+### Frontend Development & Type Safety
+Built the complete frontend system using React + TypeScript:
+
+- `AuditPage.tsx`
+  - Form component with:
+    - AI model selection
+    - Team size input
+    - Workflow/use-case inputs
+    - React Hook Form integration
+
+- `FinalPage.tsx`
+  - Results dashboard
+  - Dynamic score-based coloring:
+    - Green
+    - Blue
+    - Amber
+    - Orange
+    - Red
+
+- `Pricing_Card.tsx`
+  - Reusable pricing display component
+  - Standardized plan visualization
+
+- Zustand store (`api_data.tsx`)
+  - Centralized state management
+  - Async API handling
+  - Type-safe store methods
+
+- Created centralized type system (`types/index.ts`)
+  - Built 10 interfaces covering:
+    - Audit results
+    - Pricing data
+    - API payloads
+    - Recommendation structures
+    - Form types
+
+- Added `localStorage` persistence
+  - Allows form recovery after accidental refresh/close
+
+---
+
+### Testing & Type Validation
+- Verified **zero TypeScript errors** across frontend files
+- Fixed:
+  - Button disabled state logic
+  - Missing `AuditResult` properties
+  - Unused variables and incorrect typings
+- Tested complete flow:
+  - Form submission
+  - API call
+  - Gemini processing
+  - Database storage
+  - Audit retrieval
+  - Frontend rendering
+
+---
+
+### Documentation & Project Preparation
+- Created comprehensive `README.md`
+  - Quick start instructions
+  - Deployment setup
+  - Architecture decisions
+  - Environment variable setup
+
+- Started preparing complete documentation package:
+  - `README.md`
+  - `ARCHITECTURE.md`
+  - `DEVLOG.md`
+  - `REFLECTION.md`
+  - `TESTS.md`
+  - `PRICING_DATA.md`
+  - `PROMPTS.md`
+  - `.github/workflows`
+
+- Maintained Git development history:
+  - 8 commits tracked between May 11–12
+
+---
+
+## Additional Workflow Improvements
+- Designed UI flows first in Figma before implementation
+- Used Claude to help generate/refine the `FinalPage` structure using the Figma blueprint
+- Reused architecture and reusable patterns from my previous Curator application
+- Used AI tools mainly for:
+  - Verification
+  - Debugging
+  - Reviewing implementation decisions
+- Maintained manual control over:
+  - Architecture
+  - Business logic
+  - Security decisions
+  - Final code validation
+
+---
+
+## What I learned:
+- The importance of parameter formatting in external library APIs
 - React Hook Form integration with TypeScript
-- Zustand for lightweight state management
-- Centralized type definitions eliminate runtime errors and enable IDE autocomplete
+- Zustand for lightweight scalable state management
+- Centralized type systems reduce runtime bugs significantly
+- TypeScript strict mode catches subtle logic issues during compilation
+- End-to-end testing validates the complete stack, not just isolated components
+- Documentation quality is almost as important as implementation quality
 
-**Blockers / what I'm stuck on:** None currently resolved.
+---
 
-**Plan for tomorrow:** Deploy to production (Vercel frontend, Railway/Render backend) and prepare documentation.
+## Blockers / what I'm stuck on:
+None currently resolved.
 
 ---
 
-## Day 7 — 2025-05-13 (Tuesday)
-**Hours worked:** 5  
-**What I did:**
-- Verified zero TypeScript type errors across all 8 frontend files
-- Tested end-to-end flow: Form submission → API call → Gemini analysis → Database storage → Results retrieval
-- Created comprehensive README.md with quick start instructions, deployment guides, and decision rationale
-- Started documentation package preparation (README, ARCHITECTURE, DEVLOG, REFLECTION, TESTS, PRICING_DATA, PROMPTS, .github/workflows)
-- Set up Git commits tracking development progress (8 commits from May 11-12)
-
-**What I learned:**
-- TypeScript strict mode catches subtle bugs at compile time
-- End-to-end testing with real API calls validates all layers of the stack
-- Documentation is as important as code for project evaluation
-
-**Blockers / what I'm stuck on:** None at this moment.
-
-**Plan for tomorrow:** Complete remaining documentation files and deploy.
-
----
+## Plan for tomorrow:
+- Complete remaining documentation files
+- Deploy frontend to Vercel
+- Deploy backend to Railway/Render
+- Finalize production-ready MVP build
 
 ## Summary Statistics
 - **Total hours worked:** ~30 hours

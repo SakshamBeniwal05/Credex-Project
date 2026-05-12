@@ -1,6 +1,6 @@
-# Credex – AI Spend Auditor
+# Logo – AI Spend Auditor
 
-**Credex is an AI infrastructure platform that audits your AI tool subscriptions and recommends optimizations to reduce spending.** Users input their current AI tools, team size, and primary use case. The platform analyzes spending patterns against an AI pricing database and returns a **spend health score** (0–100) with per-model recommendations and actionable cost-saving insights.
+**Logo is an AI infrastructure platform that audits your AI tool subscriptions and recommends optimizations to reduce spending.** Users input their current AI tools, team size, and primary use case. The platform analyzes spending patterns against an AI pricing database and returns a **spend health score** (0–100) with per-model recommendations and actionable cost-saving insights.
 
 **Who it's for:** Teams, freelancers, and small companies managing multiple AI subscriptions (ChatGPT, Claude, Copilot, Cursor, Gemini, etc.) who want to eliminate waste and right-size their usage.
 
@@ -54,7 +54,7 @@ vercel deploy
 # Deploy on push to main
 ```
 
-**Live URL:** [credex.rocks](https://credex.rocks) *(replace with your deployed URL)*
+**Live URL:** [logo.rocks](https://logo.rocks) *(replace with your deployed URL)*
 
 ---
 
@@ -101,4 +101,4 @@ Infra: Vercel (FE) + Railway/Render (BE)
 
 ## Support
 
-For questions or feature requests, open an issue on [GitHub](https://github.com/SakshamBeniwal05/Credex-Project).
+For questions or feature requests, open an issue on [GitHub](https://github.com/SakshamBeniwal05/Logo-Project).
