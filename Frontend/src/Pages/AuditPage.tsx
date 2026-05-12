@@ -48,7 +48,7 @@ const AuditPage = () => {
                 navigate(`/Result/${auditId}`);
             } else {
                 setStatus("error");
-                setErrorMsg("Something went wrong. Please try again.");
+                setErrorMsg("This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.");
             }
         } catch (err: any) {
             if (err?.status === 503 || err?.message?.includes("503")) {
