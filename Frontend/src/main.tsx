@@ -20,7 +20,7 @@ const router = createBrowserRouter([
         element:<AuditPage/>
       },
             {
-        path:'/Result',
+        path:'/Result/:slug',
         element:<FinalPage/>
       }
     ]

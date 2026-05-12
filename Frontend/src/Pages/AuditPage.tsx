@@ -1,10 +1,12 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // ← add this
 import { api_data_store } from "../store/api_data.jsx";
 import { useForm } from "react-hook-form";
 import PricingCard from "../components/ui/Pricing_Card.js";
 
 const AuditPage = () => {
 
+    const navigate = useNavigate(); // ← add this
     const purpose = ["Coding", "Writing", "Research"]
 
     const saved = JSON.parse(localStorage.getItem("selected_plans") || "[]");
@@ -27,16 +29,23 @@ const AuditPage = () => {
     useEffect(() => {
         checkmodels();
     }, []);
+
     useEffect(() => {
         if (selected) localStorage.setItem("selected_plans", JSON.stringify(selected));
         if (team_size) localStorage.setItem("team_size", team_size);
         if (primary_use) localStorage.setItem("primary_use", JSON.stringify(primary_use));
     }, [selected, team_size, primary_use]);
 
+    // ── handle submit → wait for auditor → navigate ──
+    const onSubmit = async (data: any) => {
+        const auditId = await auditor(data);  // ← wait for api + db
+        if (auditId) navigate(`/Result/${auditId}`); // ← then navigate
+    };
+
     return (
         <div className="h-screen flex justify-center">
             <div className="w-2/3 my-5">
-                <form onSubmit={handleSubmit(auditor)}>
+                <form onSubmit={handleSubmit(onSubmit)}> {/* ← onSubmit not auditor */}
 
                     {/* ── Section 1: Models ── */}
                     <div className="text-lg font-bold text-[#111] mb-3">
@@ -92,7 +101,7 @@ const AuditPage = () => {
                     </div>
                     <div className="flex gap-2">
                         {purpose.map((use) => (
-                            <div>
+                            <div key={use}>
                                 <input
                                     type="checkbox"
                                     id={use}
@@ -103,7 +112,6 @@ const AuditPage = () => {
                                 <label htmlFor={use} className="px-4 py-2.5 bg-[#fcf5cc] border border-[#e5e5e0] rounded-xl text-sm font-medium peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition-all duration-200 cursor-pointer">
                                     {use}
                                 </label>
-
                             </div>
                         ))}
                     </div>
@@ -111,7 +119,7 @@ const AuditPage = () => {
                     {/* ── Submit ── */}
                     <div className="flex items-center justify-center p-5">
                         <button
-                            className="block bg-[#fcf5cc] hover:bg-[#e6e0bb] w-76 p-2 rounded-3xl font-bold active:scale-95 active:bg-accent/75 disabled:bg-accent/70 disabled:text disabled:scale-100"
+                            className="block bg-[#fcf5cc] hover:bg-[#e6e0bb] w-76 p-2 rounded-3xl font-bold active:scale-95 transition-all duration-150"
                             type="submit"
                         >
                             Submit
@@ -119,8 +127,8 @@ const AuditPage = () => {
                     </div>
 
                 </form>
-            </div >
-        </div >
+            </div>
+        </div>
     );
 };
 
