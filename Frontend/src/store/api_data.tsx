@@ -9,7 +9,7 @@ interface ModelStore {
     fetcher: (slug: string) => Promise<void>;
 }
 
-const api = "https://credex-project-on3v.onrender.com/"
+const api = "https://credex-project-on3v.onrender.com"
 
 export const api_data_store = create<ModelStore>((set) => ({
     models: null,
