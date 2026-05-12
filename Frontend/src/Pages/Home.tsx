@@ -1,4 +1,5 @@
 import type { FC } from 'react'
+import { Link } from 'react-router-dom'
 import Skeleton_Doc from '../components/ui/Skeleton_Doc'
 
 const Home: FC = () => {
@@ -24,9 +25,11 @@ const Home: FC = () => {
                             We care about your spendings, so Spend Smart
                         </div>
                         <div id="Hero_Buttons">
-                            <button className="text-2xl p-4 bg-amber-400 rounded-2xl hover:text-white hover:bg-amber-500 hover:scale-105 transition-transform duration-150 drop-shadow-lg">
-                                Auditor
-                            </button>
+                            <Link to={'/auditPage'}>
+                                <button className="text-2xl p-4 bg-amber-400 rounded-2xl hover:text-white hover:bg-amber-500 hover:scale-105 transition-transform duration-150 drop-shadow-lg">
+                                    Auditor
+                                </button>
+                            </Link>
                         </div>
                         <div className='bg-linear-to-b from-transparent to-white'>
                             <Skeleton_Doc />
