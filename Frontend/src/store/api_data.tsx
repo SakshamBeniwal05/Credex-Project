@@ -9,7 +9,7 @@ interface ModelStore {
     fetcher: (slug: string) => Promise<void>;
 }
 
-const api = import.meta.env.VITE_BACKEND_URL.BACKEND
+const api = import.meta.env.VITE_BACKEND_URL
 
 export const api_data_store = create<ModelStore>((set) => ({
     models: null,
