@@ -35,11 +35,6 @@ const Home: FC = () => {
                             <Skeleton_Doc />
                         </div>
                     </div>
-
-                    <div id='Section One' className='flex justify-center items-center gap-5'>
-                        <div className='bg-blue-900'>sdfdsfs</div>
-                        <div className='bg-amber-700'>sdadaasda</div>
-                    </div>
                 </div>
 
             </div>
