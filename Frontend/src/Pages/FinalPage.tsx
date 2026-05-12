@@ -18,6 +18,10 @@ const FinalPage = () => {
         </div>
     );
 
+    const printdoc = ()=>{
+        window.print()
+    }
+
     // ── handle both shapes ──
     const data = (result?.result ?? result) as Partial<AuditResult>;
 
@@ -233,6 +237,11 @@ const FinalPage = () => {
                         ))}
                     </div>
                 </div>
+
+                <button onClick={printdoc} className="block bg-[#fcf5cc] hover:bg-[#e6e0bb] w-76 p-2 rounded-3xl font-bold active:scale-95 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                    type="button">
+                    Submit
+                </button>
 
             </div>
         </div>
