@@ -1,5 +1,8 @@
 import { create } from 'zustand'
 import type { Model, AuditResponse, AuditFormData, SelectedPlan } from '../types'
+import dotenv from "dotenv"
+
+dotenv.config()
 
 interface ModelStore {
     models: Model[] | null;
@@ -9,7 +12,7 @@ interface ModelStore {
     fetcher: (slug: string) => Promise<void>;
 }
 
-const api = "https://credex-project-on3v.onrender.com"
+const api = process.env.BACKEND
 
 export const api_data_store = create<ModelStore>((set) => ({
     models: null,
