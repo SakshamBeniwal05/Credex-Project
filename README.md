@@ -1,3 +1,6 @@
+## In this current we spend before we think, because we found convenience on our hand either is home delivery instead of shopping netflix instead of theatre and now work which mostly or can be done not by indulging in it but by orchestrating it, in this connivence sometimes we didnt look over our spending like i also have 3 subscription netflix prime video and hotstar while i need only one netflix, AI is costly and will get costlier as we use and integrate in our life to regulate these things layman user which still new to AI dont know about tokes and how they work and how they cost ai auditor are specifically for them and guide them 
+
+
 # Logo – AI Spend Auditor
 
 **Logo is an AI infrastructure platform that audits your AI tool subscriptions and recommends optimizations to reduce spending.** Users input their current AI tools, team size, and primary use case. The platform analyzes spending patterns against an AI pricing database and returns a **spend health score** (0–100) with per-model recommendations and actionable cost-saving insights.
