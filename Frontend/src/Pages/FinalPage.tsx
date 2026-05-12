@@ -18,7 +18,7 @@ const FinalPage = () => {
         </div>
     );
 
-    const printdoc = ()=>{
+    const printdoc = () => {
         window.print()
     }
 
@@ -237,11 +237,12 @@ const FinalPage = () => {
                         ))}
                     </div>
                 </div>
-
-                <button onClick={printdoc} className="block bg-[#fcf5cc] hover:bg-[#e6e0bb] w-76 p-2 rounded-3xl font-bold active:scale-95 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
-                    type="button">
-                    Submit
-                </button>
+                <div className="flex items-center justify-center p-5">
+                    <button onClick={printdoc} className="block bg-[#fcf5cc] hover:bg-[#e6e0bb] w-76 p-2 rounded-3xl font-bold active:scale-95 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                        type="button">
+                        Submit
+                    </button>
+                </div>
 
             </div>
         </div>
