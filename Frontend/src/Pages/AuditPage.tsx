@@ -43,10 +43,10 @@ const AuditPage = () => {
     // otherwise a readable string for API/custom plans
     const resolvePlanPrice = (j: Plan): number | string => {
         if (typeof j.price_monthly === "number") return j.price_monthly;
-        if (j.input_per_million != null && j.output_per_million != null) {
-            return `$${j.input_per_million} input / $${j.output_per_million} output per 1M tokens`;
+        if (j.input_per_1M != null && j.output_per_1M != null) {
+            return `$${j.input_per_1M} input / $${j.output_per_1M} output per 1M tokens`;
         }
-        return j.price_text ?? "Custom";
+        return "Custom";
     };
 
     const onSubmit = async (data: AuditFormData) => {
