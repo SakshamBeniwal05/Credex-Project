@@ -14,6 +14,11 @@ export const model_api_data = (req, res) => {
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)
 
+const toNum = (v) => {
+    const n = parseFloat(v);
+    return isNaN(n) ? null : n;
+};
+
 const insertAudit = async (data) => {
   if (!data) throw new Error("Missing payload");
   if (!Array.isArray(data.modelAnalysis)) throw new Error("modelAnalysis must be an array");
@@ -45,14 +50,14 @@ const insertAudit = async (data) => {
         name: m.name,
         currentPlan: m.currentPlan,
         suggestedPlan: m.suggestedPlan,
-        accuracy: m.accuracy,
-        speed: m.speed,
-        cost: m.cost,
+        accuracy: toNum(m.accuracy),
+        speed: toNum(m.speed),
+        cost: toNum(m.cost),
         note: m.note,
-        currentPrice: m.currentPrice,
-        suggestedPrice: m.suggestedPrice,
-        currentPerformance: m.currentPerformance,
-        suggestedPerformance: m.suggestedPerformance,
+        currentPrice: toNum(m.currentPrice),
+        suggestedPrice: toNum(m.suggestedPrice),
+        currentPerformance: toNum(m.currentPerformance),
+        suggestedPerformance: toNum(m.suggestedPerformance),
         comparisonNote: m.comparisonNote,
       }))
     );
@@ -142,8 +147,8 @@ The JSON must follow this exact structure:
       "speed": <0–100>,
       "cost": <0–100>,
       "note": <one sentence on this model's fit for their use case>,
-      "currentPrice": <current plan monthly price USD>,
-      "suggestedPrice": <suggested plan monthly price USD — must match the price in the AVAILABLE PLANS list>,
+      "currentPrice": <current plan monthly price as a number — NEVER a string like "Custom">,
+      "suggestedPrice": <suggested plan monthly price as a number — must match the price in the AVAILABLE PLANS list>,
       "currentPerformance": <0–100>,
       "suggestedPerformance": <0–100 — same as currentPerformance if isOptimal=true>,
       "comparisonNote": <if isOptimal=true: "This plan is optimal for your team size and use case." else: one sentence why the suggested plan is better>
@@ -242,6 +247,7 @@ RULES:
 - NEVER suggest a plan from a different vendor
 - NEVER suggest a plan that costs more than the current one
 - suggestedPrice must exactly match the price in the AVAILABLE PLANS list
+- currentPrice and suggestedPrice must ALWAYS be numbers — never strings, never "Custom"
 - Do not manufacture savings — if optimal, say so honestly
 
 above500:

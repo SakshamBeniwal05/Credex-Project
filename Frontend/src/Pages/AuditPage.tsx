@@ -40,6 +40,13 @@ const AuditPage = () => {
     }, [selected, team_size, primary_use]);
 
     const onSubmit = async (data: AuditFormData) => {
+        // Strip any plans with non-numeric prices (e.g. Enterprise "Custom" plans)
+        const cleanedPlans = (data.selected_plans ?? []).filter((p: any) => {
+            const parsed = typeof p === "string" ? JSON.parse(p) : p;
+            return typeof parsed.price_monthly === "number" && !isNaN(parsed.price_monthly);
+        });
+        data = { ...data, selected_plans: cleanedPlans };
+
         setStatus("loading");
         setErrorMsg("");
         try {
@@ -151,23 +158,25 @@ const AuditPage = () => {
                                 <div>{i.product}</div>
                             </div>
                             <div className="flex gap-5 items-center overflow-x-scroll">
-                                {i.plans?.map((j: Plan) => (
-                                    <div key={j.id} className="relative">
-                                        <input
-                                            type="checkbox"
-                                            className="peer hidden"
-                                            value={JSON.stringify({ model: i.product, plan: j.name, price_monthly: j.price_monthly ?? "Custom" })}
-                                            id={j.id}
-                                            {...register("selected_plans")}
-                                        />
-                                        <label
-                                            className="cursor-pointer peer-checked:text-white transition-all duration-300 peer-checked:bg-blue-600 block bg-[#fcf5cc] rounded-2xl"
-                                            htmlFor={j.id}
-                                        >
-                                            <PricingCard data={j} />
-                                        </label>
-                                    </div>
-                                ))}
+                                {i.plans
+                                    ?.filter((j: Plan) => typeof j.price_monthly === "number")
+                                    .map((j: Plan) => (
+                                        <div key={j.id} className="relative">
+                                            <input
+                                                type="checkbox"
+                                                className="peer hidden"
+                                                value={JSON.stringify({ model: i.product, plan: j.name, price_monthly: j.price_monthly })}
+                                                id={j.id}
+                                                {...register("selected_plans")}
+                                            />
+                                            <label
+                                                className="cursor-pointer peer-checked:text-white transition-all duration-300 peer-checked:bg-blue-600 block bg-[#fcf5cc] rounded-2xl"
+                                                htmlFor={j.id}
+                                            >
+                                                <PricingCard data={j} />
+                                            </label>
+                                        </div>
+                                    ))}
                             </div>
                         </div>
                     ))}
