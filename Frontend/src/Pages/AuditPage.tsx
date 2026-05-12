@@ -39,14 +39,17 @@ const AuditPage = () => {
         if (primary_use) localStorage.setItem("primary_use", JSON.stringify(primary_use));
     }, [selected, team_size, primary_use]);
 
-    const onSubmit = async (data: AuditFormData) => {
-        // Strip any plans with non-numeric prices (e.g. Enterprise "Custom" plans)
-        const cleanedPlans = (data.selected_plans ?? []).filter((p: any) => {
-            const parsed = typeof p === "string" ? JSON.parse(p) : p;
-            return typeof parsed.price_monthly === "number" && !isNaN(parsed.price_monthly);
-        });
-        data = { ...data, selected_plans: cleanedPlans };
+    // Returns a numeric price if monthly price exists,
+    // otherwise a readable string for API/custom plans
+    const resolvePlanPrice = (j: Plan): number | string => {
+        if (typeof j.price_monthly === "number") return j.price_monthly;
+        if (j.input_per_million != null && j.output_per_million != null) {
+            return `$${j.input_per_million} input / $${j.output_per_million} output per 1M tokens`;
+        }
+        return j.price_text ?? "Custom";
+    };
 
+    const onSubmit = async (data: AuditFormData) => {
         setStatus("loading");
         setErrorMsg("");
         try {
@@ -103,10 +106,7 @@ const AuditPage = () => {
                 <div className="text-lg font-bold text-[#111]">AI is a little busy</div>
                 <div className="text-sm text-[#888]">{errorMsg}</div>
                 <button
-                    onClick={() => {
-                        setStatus("idle");
-                        setErrorMsg("");
-                    }}
+                    onClick={() => { setStatus("idle"); setErrorMsg(""); }}
                     className="bg-[#fcf5cc] hover:bg-[#e6e0bb] border border-[#e5e5e0] px-6 py-2.5 rounded-xl font-semibold text-sm transition-all duration-150 active:scale-95 w-full"
                 >
                     Retry
@@ -123,10 +123,7 @@ const AuditPage = () => {
                 <div className="text-lg font-bold text-[#111]">Something went wrong</div>
                 <div className="text-sm text-[#888]">{errorMsg}</div>
                 <button
-                    onClick={() => {
-                        setStatus("idle");
-                        setErrorMsg("");
-                    }}
+                    onClick={() => { setStatus("idle"); setErrorMsg(""); }}
                     className="bg-[#fcf5cc] hover:bg-[#e6e0bb] border border-[#e5e5e0] px-6 py-2.5 rounded-xl font-semibold text-sm transition-all duration-150 active:scale-95 w-full"
                 >
                     Go back & retry
@@ -158,25 +155,27 @@ const AuditPage = () => {
                                 <div>{i.product}</div>
                             </div>
                             <div className="flex gap-5 items-center overflow-x-scroll">
-                                {i.plans
-                                    ?.filter((j: Plan) => typeof j.price_monthly === "number")
-                                    .map((j: Plan) => (
-                                        <div key={j.id} className="relative">
-                                            <input
-                                                type="checkbox"
-                                                className="peer hidden"
-                                                value={JSON.stringify({ model: i.product, plan: j.name, price_monthly: j.price_monthly })}
-                                                id={j.id}
-                                                {...register("selected_plans")}
-                                            />
-                                            <label
-                                                className="cursor-pointer peer-checked:text-white transition-all duration-300 peer-checked:bg-blue-600 block bg-[#fcf5cc] rounded-2xl"
-                                                htmlFor={j.id}
-                                            >
-                                                <PricingCard data={j} />
-                                            </label>
-                                        </div>
-                                    ))}
+                                {i.plans?.map((j: Plan) => (
+                                    <div key={j.id} className="relative">
+                                        <input
+                                            type="checkbox"
+                                            className="peer hidden"
+                                            value={JSON.stringify({
+                                                model: i.product,
+                                                plan: j.name,
+                                                price_monthly: resolvePlanPrice(j)
+                                            })}
+                                            id={j.id}
+                                            {...register("selected_plans")}
+                                        />
+                                        <label
+                                            className="cursor-pointer peer-checked:text-white transition-all duration-300 peer-checked:bg-blue-600 block bg-[#fcf5cc] rounded-2xl"
+                                            htmlFor={j.id}
+                                        >
+                                            <PricingCard data={j} />
+                                        </label>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     ))}

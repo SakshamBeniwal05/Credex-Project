@@ -14,6 +14,7 @@ export const model_api_data = (req, res) => {
 
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)
 
+// Only used for true 0-100 score fields — NOT for price
 const toNum = (v) => {
     const n = parseFloat(v);
     return isNaN(n) ? null : n;
@@ -42,6 +43,8 @@ const insertAudit = async (data) => {
   const auditId = auditRow.id;
 
   // 2) insert models
+  // currentPrice / suggestedPrice are stored as text — can be a number like 20
+  // or a string like "$1 input / $5 output per 1M tokens"
   const { error: modelsError } = await supabase
     .from("audit_models")
     .insert(
@@ -54,8 +57,8 @@ const insertAudit = async (data) => {
         speed: toNum(m.speed),
         cost: toNum(m.cost),
         note: m.note,
-        currentPrice: toNum(m.currentPrice),
-        suggestedPrice: toNum(m.suggestedPrice),
+        currentPrice: m.currentPrice != null ? String(m.currentPrice) : null,
+        suggestedPrice: m.suggestedPrice != null ? String(m.suggestedPrice) : null,
         currentPerformance: toNum(m.currentPerformance),
         suggestedPerformance: toNum(m.suggestedPerformance),
         comparisonNote: m.comparisonNote,
@@ -114,7 +117,7 @@ const fetchAuditById = async (auditId) => {
   };
 };
 
-// ── OpenAI ────────────────────────────────────────────────────────────────────
+// ── Gemini ────────────────────────────────────────────────────────────────────
 
 const client = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
@@ -127,6 +130,9 @@ You will receive:
 - selected_plans: array of objects like { model, plan, price_monthly }
 - team_size: number of people in the team
 - primary_use: array of use cases like ["coding", "writing", "research"]
+
+IMPORTANT: price_monthly may be a number (e.g. 20) for flat monthly plans, OR a string
+(e.g. "$1 input / $5 output per 1M tokens") for API/usage-based plans. Handle both.
 
 You must return ONLY a valid JSON object — no explanation, no markdown, no backticks. Just raw JSON.
 
@@ -147,8 +153,8 @@ The JSON must follow this exact structure:
       "speed": <0–100>,
       "cost": <0–100>,
       "note": <one sentence on this model's fit for their use case>,
-      "currentPrice": <current plan monthly price as a number — NEVER a string like "Custom">,
-      "suggestedPrice": <suggested plan monthly price as a number — must match the price in the AVAILABLE PLANS list>,
+      "currentPrice": <string or number — the price as received in price_monthly. For flat plans use the number. For API plans use the token pricing string as-is>,
+      "suggestedPrice": <string or number — same format as currentPrice. Must match the AVAILABLE PLANS list. If isOptimal, repeat currentPrice>,
       "currentPerformance": <0–100>,
       "suggestedPerformance": <0–100 — same as currentPerformance if isOptimal=true>,
       "comparisonNote": <if isOptimal=true: "This plan is optimal for your team size and use case." else: one sentence why the suggested plan is better>
@@ -212,9 +218,10 @@ GEMINI:
 - API Pro: $2.00 input / $12.00 output per 1M tokens
 
 == COST PER SEAT ANALYSIS ==
-Always calculate costPerSeat = price_monthly / team_size before judging any plan.
+For flat monthly plans: costPerSeat = price_monthly / team_size
+For API/token plans: treat as variable cost — mark as OPTIMAL unless there is a clearly cheaper same-vendor API tier for the same use case.
 
-Per-seat benchmarks:
+Per-seat benchmarks (flat plans only):
 - < $0.50/seat/mo  → Extremely cheap. Almost certainly OPTIMAL.
 - $0.50–$2/seat/mo → Very cheap. Likely OPTIMAL.
 - $2–$5/seat/mo    → Reasonable. Check if a lower tier covers the use case.
@@ -235,10 +242,11 @@ Examples:
 - 7 out of 7 → score = 100
 
 HOW TO DETERMINE OPTIMAL:
-Step 1 — costPerSeat = price_monthly / team_size
-Step 2 — If costPerSeat < $2 → OPTIMAL (skip remaining steps)
-Step 3 — Check AVAILABLE PLANS above for a cheaper same-vendor plan
-Step 4 — Does the cheaper plan cover the team's use case and size?
+Step 1 — If API/token plan: check if a cheaper same-vendor API tier covers the use case → if yes NOT OPTIMAL, else OPTIMAL
+Step 2 — If flat plan: costPerSeat = price_monthly / team_size
+Step 3 — If costPerSeat < $2 → OPTIMAL (skip remaining steps)
+Step 4 — Check AVAILABLE PLANS above for a cheaper same-vendor plan
+Step 5 — Does the cheaper plan cover the team's use case and size?
   - Yes → NOT OPTIMAL, set suggestedPlan to that cheaper plan with its exact price
   - No  → OPTIMAL, suggestedPlan = currentPlan, suggestedPrice = currentPrice
 
@@ -247,11 +255,11 @@ RULES:
 - NEVER suggest a plan from a different vendor
 - NEVER suggest a plan that costs more than the current one
 - suggestedPrice must exactly match the price in the AVAILABLE PLANS list
-- currentPrice and suggestedPrice must ALWAYS be numbers — never strings, never "Custom"
 - Do not manufacture savings — if optimal, say so honestly
 
 above500:
-- savings = sum of (currentPrice - suggestedPrice) across all non-optimal plans
+- Only applies to flat monthly plans where numeric comparison is possible
+- savings = sum of (currentPrice - suggestedPrice) across all non-optimal flat plans
 - above500 = true if savings > 500
 
 SCORE BANDS:
@@ -270,6 +278,7 @@ RECOMMENDATIONS:
 - Must reference specific plan names and exact savings amounts
 - Good: "⬇️ Downgrade Claude Max 20x ($200) to Pro ($20) — saves $180/mo for a 2-person team"
 - Good: "✅ Gemini Ultra at $0.25/seat for 1000 people is already optimal — no action needed"
+- Good: "🔁 Switch OpenAI API from GPT-5.4 ($5/$20 per 1M) to GPT-5.4 Mini ($0.75/$3) for non-critical tasks"
 - Bad: "Review your subscriptions" — never this vague
 - If above500=true: one must be "🚀 Let Credex automate your AI spend optimization"
 - If above500=false: no Credex mention
@@ -281,46 +290,46 @@ USE CASE RULES:
 - ONLY return the JSON object, nothing else
 `;
 
-const mockData =  {
-        score: -19,
-        teamSize: 12,
-        useCase: "Coding & Research",
-        models: ["GPT-4", "Claude Sonnet 4", "Gemini Pro"],
-        modelAnalysis: [
-            {
-                name: "GPT-4",
-                currentPlan: "Team",
-                suggestedPlan: "Pro",
-                accuracy: 92, speed: 78, cost: 65,
-                note: "Excellent for complex reasoning tasks.",
-                currentPrice: 30, suggestedPrice: 20,
-                currentPerformance: 78, suggestedPerformance: 74,
-                comparisonNote: "Downgrading saves $10/seat/mo with only a 4% drop."
-            },
-            {
-                name: "Claude Sonnet 4",
-                currentPlan: "Max 20x",
-                suggestedPlan: "Pro",
-                accuracy: 95, speed: 88, cost: 72,
-                note: "Best for code generation with strong safety features.",
-                currentPrice: 200, suggestedPrice: 20,
-                currentPerformance: 95, suggestedPerformance: 85,
-                comparisonNote: "Max 20x is overkill. Pro gives 85% performance at 10% cost."
-            },
-            {
-                name: "Gemini Pro",
-                currentPlan: "Ultra",
-                suggestedPlan: "Pro",
-                accuracy: 80, speed: 92, cost: 95,
-                note: "Optimal for cost efficiency and multilingual support.",
-                currentPrice: 249, suggestedPrice: 19.99,
-                currentPerformance: 88, suggestedPerformance: 80,
-                comparisonNote: "Ultra is underutilised. Pro handles 90% of the same tasks."
-            },
-        ],
-        summary: "Your team is spending more than the optimal benchmark. Rebalancing seat allocation could recover the overspend.",
-        recommendations: ["💡 Consolidate seats", "💡 Downgrade idle plans", "💡 Switch heavy tasks to Gemini"]
-    };
+const mockData = {
+    score: 33,
+    teamSize: 12,
+    useCase: "Coding & Research",
+    models: ["GPT-4", "Claude Sonnet 4", "Gemini Pro"],
+    modelAnalysis: [
+        {
+            name: "GPT-4",
+            currentPlan: "Team",
+            suggestedPlan: "Pro",
+            accuracy: 92, speed: 78, cost: 65,
+            note: "Excellent for complex reasoning tasks.",
+            currentPrice: 30, suggestedPrice: 20,
+            currentPerformance: 78, suggestedPerformance: 74,
+            comparisonNote: "Downgrading saves $10/seat/mo with only a 4% drop."
+        },
+        {
+            name: "Claude Sonnet 4",
+            currentPlan: "Max 20x",
+            suggestedPlan: "Pro",
+            accuracy: 95, speed: 88, cost: 72,
+            note: "Best for code generation with strong safety features.",
+            currentPrice: 200, suggestedPrice: 20,
+            currentPerformance: 95, suggestedPerformance: 85,
+            comparisonNote: "Max 20x is overkill. Pro gives 85% performance at 10% cost."
+        },
+        {
+            name: "Gemini Pro",
+            currentPlan: "Ultra",
+            suggestedPlan: "Pro",
+            accuracy: 80, speed: 92, cost: 95,
+            note: "Optimal for cost efficiency and multilingual support.",
+            currentPrice: 249, suggestedPrice: 19.99,
+            currentPerformance: 88, suggestedPerformance: 80,
+            comparisonNote: "Ultra is underutilised. Pro handles 90% of the same tasks."
+        },
+    ],
+    summary: "Your team is spending more than the optimal benchmark. Rebalancing seat allocation could recover the overspend.",
+    recommendations: ["💡 Consolidate seats", "💡 Downgrade idle plans", "💡 Switch heavy tasks to Gemini"]
+};
 
 export const plan_Data = async (req, res) => {
     const { selected_plans, primary_use, team_size } = req.body;
@@ -338,10 +347,8 @@ export const plan_Data = async (req, res) => {
 
         const result = aiResponse ? JSON.parse(aiResponse.response.text()) : mockData;
 
-        // 3) insert into supabase — pass result directly
         const auditId = await insertAudit(result);
 
-        // 4) return to frontend
         res.status(200).json({ auditId, ...result });
 
     } catch (error) {
