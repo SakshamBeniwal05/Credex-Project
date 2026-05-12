@@ -10,8 +10,7 @@ const model_data = [
       { "id": "cur-02", "name": "Pro", "price_monthly": 20, "price_annual": 16, "notes": "$20 monthly credit pool. Frontier models, MCPs, cloud agents, unlimited Tab completions." },
       { "id": "cur-03", "name": "Pro+", "price_monthly": 60, "price_annual": 48, "notes": "3x usage credits ($60 pool). Everything in Pro." },
       { "id": "cur-04", "name": "Ultra", "price_monthly": 200, "price_annual": 160, "notes": "20x usage credits ($400 pool). Priority access to new features." },
-      { "id": "cur-05", "name": "Teams", "price_monthly": 40, "price_annual": 32, "notes": "Per user/month. Shared chats, SSO, centralized billing, usage analytics." },
-      { "id": "cur-06", "name": "Enterprise", "price_monthly": null, "price_annual": null, "notes": "Custom pricing. Pooled usage, invoice billing, dedicated support." }
+      { "id": "cur-05", "name": "Teams", "price_monthly": 40, "price_annual": 32, "notes": "Per user/month. Shared chats, SSO, centralized billing, usage analytics." }
     ]
   },
   {
@@ -24,8 +23,7 @@ const model_data = [
       { "id": "ghc-01", "name": "Free", "price_monthly": 0, "price_annual": null, "notes": "Limited completions & chat. No credit card required." },
       { "id": "ghc-02", "name": "Pro", "price_monthly": 10, "price_annual": null, "notes": "$10 monthly AI credits. Unlimited completions, premium model access, cloud agent." },
       { "id": "ghc-03", "name": "Pro+", "price_monthly": 39, "price_annual": null, "notes": "$39 monthly AI credits. Full model access including Claude Opus & o3. All Pro features." },
-      { "id": "ghc-04", "name": "Business", "price_monthly": 19, "price_annual": null, "notes": "Per user/month. $19 AI credits pooled org-wide. SSO, IP indemnity, policy controls." },
-      { "id": "ghc-05", "name": "Enterprise", "price_monthly": 39, "price_annual": null, "notes": "Per user/month (requires GitHub Enterprise Cloud). Custom models, knowledge base indexing, fine-tuning." }
+      { "id": "ghc-04", "name": "Business", "price_monthly": 19, "price_annual": null, "notes": "Per user/month. $19 AI credits pooled org-wide. SSO, IP indemnity, policy controls." }
     ]
   },
   {
@@ -39,8 +37,7 @@ const model_data = [
       { "id": "cld-02", "name": "Pro", "price_monthly": 20, "price_annual": null, "notes": "5x more usage than Free. Claude Opus access. Claude Code CLI included." },
       { "id": "cld-03", "name": "Max 5x", "price_monthly": 100, "price_annual": null, "notes": "5x more usage than Pro. Full model access including Opus." },
       { "id": "cld-04", "name": "Max 20x", "price_monthly": 200, "price_annual": null, "notes": "20x more usage than Pro. Highest usage limits." },
-      { "id": "cld-05", "name": "Team", "price_monthly": 25, "price_annual": null, "notes": "Per seat/month. Shared projects, admin controls." },
-      { "id": "cld-06", "name": "Enterprise", "price_monthly": null, "price_annual": null, "notes": "Custom pricing. 500K context, SSO/SCIM, HIPAA compliance." }
+      { "id": "cld-05", "name": "Team", "price_monthly": 25, "price_annual": null, "notes": "Per seat/month. Shared projects, admin controls." }
     ]
   },
   {
@@ -66,8 +63,7 @@ const model_data = [
       { "id": "gpt-02", "name": "Go", "price_monthly": 8, "price_annual": null, "notes": "Ad-supported. International users. Basic GPT access." },
       { "id": "gpt-03", "name": "Plus", "price_monthly": 20, "price_annual": null, "notes": "No ads. GPT-5.4 access. 40 messages/3hrs on flagship model." },
       { "id": "gpt-04", "name": "Pro", "price_monthly": 100, "price_annual": null, "notes": "5x usage vs Plus. Direct response to Claude Max 5x." },
-      { "id": "gpt-05", "name": "Team", "price_monthly": 30, "price_annual": 25, "notes": "Per user/month. Shared workspace, admin controls, higher limits." },
-      { "id": "gpt-06", "name": "Enterprise", "price_monthly": null, "price_annual": null, "notes": "Custom pricing. Advanced security, compliance, unlimited usage." }
+      { "id": "gpt-05", "name": "Team", "price_monthly": 30, "price_annual": 25, "notes": "Per user/month. Shared workspace, admin controls, higher limits." }
     ]
   },
   {
@@ -80,8 +76,7 @@ const model_data = [
       { "id": "oaa-01", "name": "GPT-5.4 Nano", "price_monthly": null, "input_per_1M": 0.2, "output_per_1M": 0.8, "notes": "Cheapest proprietary model. Great for high-volume simple tasks." },
       { "id": "oaa-02", "name": "GPT-5.4 Mini", "price_monthly": null, "input_per_1M": 0.75, "output_per_1M": 3.0, "notes": "Best mid-tier value. Cheaper than Claude Haiku on input." },
       { "id": "oaa-03", "name": "GPT-5.4", "price_monthly": null, "input_per_1M": 5.0, "output_per_1M": 20.0, "notes": "Flagship model. Full reasoning capabilities." },
-      { "id": "oaa-04", "name": "GPT-5.4 Pro", "price_monthly": null, "input_per_1M": 21.0, "output_per_1M": 168.0, "notes": "Extended thinking / premium reasoning model." },
-      { "id": "oaa-05", "name": "Batch API", "price_monthly": null, "input_per_1M": null, "output_per_1M": null, "notes": "50% discount on all models. 24hr async processing." }
+      { "id": "oaa-04", "name": "GPT-5.4 Pro", "price_monthly": null, "input_per_1M": 21.0, "output_per_1M": 168.0, "notes": "Extended thinking / premium reasoning model." }
     ]
   },
   {
