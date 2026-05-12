@@ -1,8 +1,5 @@
 import { create } from 'zustand'
 import type { Model, AuditResponse, AuditFormData, SelectedPlan } from '../types'
-import dotenv from "dotenv"
-
-dotenv.config()
 
 interface ModelStore {
     models: Model[] | null;
@@ -12,7 +9,7 @@ interface ModelStore {
     fetcher: (slug: string) => Promise<void>;
 }
 
-const api = process.env.BACKEND
+const api = import.meta.env.VITE_BACKEND_URL.BACKEND
 
 export const api_data_store = create<ModelStore>((set) => ({
     models: null,
