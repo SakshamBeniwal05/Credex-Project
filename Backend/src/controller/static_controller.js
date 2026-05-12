@@ -321,7 +321,7 @@ export const plan_Data = async (req, res) => {
 
     try {
         const model = client.getGenerativeModel({
-            model: "gemini-3-flash-preview",
+            model: "gemini-2.5-flash",
             systemInstruction: systemPrompt
         });
 
