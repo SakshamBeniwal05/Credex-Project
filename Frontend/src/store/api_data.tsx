@@ -1,10 +1,11 @@
 import { create } from 'zustand'
+import type { Model, AuditResponse, AuditFormData, SelectedPlan } from '../types'
 
 interface ModelStore {
-    models: any;
-    result: any;                          // ← store result here
+    models: Model[] | null;
+    result: AuditResponse | null;
     checkmodels: () => Promise<void>;
-    auditor: (data: any) => Promise<void>;
+    auditor: (data: AuditFormData) => Promise<string | undefined>;
     fetcher: (slug: string) => Promise<void>;
 }
 
@@ -17,37 +18,40 @@ export const api_data_store = create<ModelStore>((set) => ({
     checkmodels: async () => {
         try {
             const res = await fetch(`${api}/models`);
-            const data = await res.json();
+            const data: Model[] = await res.json();
             set({ models: data });
         } catch (error) {
-            console.error(error);
+            console.error("Error fetching models:", error);
         }
     },
 
-    auditor: async (data: any) => {
-        const selected_plans = (data.selected_plans || []).map((item: string) => JSON.parse(item));
-        const { primary_use, team_size } = data;
+    auditor: async (data: AuditFormData): Promise<string | undefined> => {
         try {
+            const selected_plans: SelectedPlan[] = (data.selected_plans || []).map((item: string) => JSON.parse(item));
+            const { primary_use, team_size } = data;
+            
             const res = await fetch(`${api}/audit`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ selected_plans, primary_use, team_size })
             });
-            const result = await res.json();
+            
+            const result: AuditResponse = await res.json();
             set({ result });
-            return result.auditId; // ← return id
+            return result.auditId;
         } catch (error) {
-            console.error(error);
+            console.error("Error running audit:", error);
+            return undefined;
         }
     },
 
-    fetcher: async (slug: string) => {
+    fetcher: async (slug: string): Promise<void> => {
         try {
-            const res = await fetch(`${api}/audit/${slug}`);  // ← correct endpoint with id
-            const result = await res.json();
+            const res = await fetch(`${api}/audit/${slug}`);
+            const result: AuditResponse = await res.json();
             set({ result });
         } catch (error) {
-            console.error(error);
+            console.error("Error fetching audit result:", error);
         }
     }
 }))

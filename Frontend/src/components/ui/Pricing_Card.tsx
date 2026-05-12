@@ -1,5 +1,6 @@
-const PricingCard = ({ data }: { data: any }) => {
+import type { PricingCardProps } from '../../types'
 
+const PricingCard = ({ data }: PricingCardProps) => {
     const hasMonthly = data?.price_monthly != null;
     const hasTokenPricing = data?.input_per_1M != null || data?.output_per_1M != null;
 

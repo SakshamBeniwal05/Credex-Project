@@ -1,6 +1,7 @@
+import type { FC } from 'react'
 import Skeleton_Doc from '../components/ui/Skeleton_Doc'
 
-const Home = () => {
+const Home: FC = () => {
     return (
         <div>
             <div className="min-h-screen w-full bg-[#f9fafb] relative">
