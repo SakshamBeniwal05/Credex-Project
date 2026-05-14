@@ -7,7 +7,7 @@ import { createClient } from '@supabase/supabase-js'
 dotenv.config()
 
 export const model_api_data = (req, res) => {
-    res.status(200).json(model_data);
+  res.status(200).json(model_data);
 };
 
 // ── Supabase ──────────────────────────────────────────────────────────────────
@@ -16,8 +16,8 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SER
 
 // Only used for true 0-100 score fields — NOT for price
 const toNum = (v) => {
-    const n = parseFloat(v);
-    return isNaN(n) ? null : n;
+  const n = parseFloat(v);
+  return isNaN(n) ? null : n;
 };
 
 const insertAudit = async (data) => {
@@ -291,79 +291,82 @@ USE CASE RULES:
 `;
 
 const mockData = {
-    score: 33,
-    teamSize: 12,
-    useCase: "Coding & Research",
-    models: ["GPT-4", "Claude Sonnet 4", "Gemini Pro"],
-    modelAnalysis: [
-        {
-            name: "GPT-4",
-            currentPlan: "Team",
-            suggestedPlan: "Pro",
-            accuracy: 92, speed: 78, cost: 65,
-            note: "Excellent for complex reasoning tasks.",
-            currentPrice: 30, suggestedPrice: 20,
-            currentPerformance: 78, suggestedPerformance: 74,
-            comparisonNote: "Downgrading saves $10/seat/mo with only a 4% drop."
-        },
-        {
-            name: "Claude Sonnet 4",
-            currentPlan: "Max 20x",
-            suggestedPlan: "Pro",
-            accuracy: 95, speed: 88, cost: 72,
-            note: "Best for code generation with strong safety features.",
-            currentPrice: 200, suggestedPrice: 20,
-            currentPerformance: 95, suggestedPerformance: 85,
-            comparisonNote: "Max 20x is overkill. Pro gives 85% performance at 10% cost."
-        },
-        {
-            name: "Gemini Pro",
-            currentPlan: "Ultra",
-            suggestedPlan: "Pro",
-            accuracy: 80, speed: 92, cost: 95,
-            note: "Optimal for cost efficiency and multilingual support.",
-            currentPrice: 249, suggestedPrice: 19.99,
-            currentPerformance: 88, suggestedPerformance: 80,
-            comparisonNote: "Ultra is underutilised. Pro handles 90% of the same tasks."
-        },
-    ],
-    summary: "Your team is spending more than the optimal benchmark. Rebalancing seat allocation could recover the overspend.",
-    recommendations: ["💡 Consolidate seats", "💡 Downgrade idle plans", "💡 Switch heavy tasks to Gemini"]
+  score: 33,
+  teamSize: 12,
+  useCase: "Coding & Research",
+  models: ["GPT-4", "Claude Sonnet 4", "Gemini Pro"],
+  modelAnalysis: [
+    {
+      name: "GPT-4",
+      currentPlan: "Team",
+      suggestedPlan: "Pro",
+      accuracy: 92, speed: 78, cost: 65,
+      note: "Excellent for complex reasoning tasks.",
+      currentPrice: 30, suggestedPrice: 20,
+      currentPerformance: 78, suggestedPerformance: 74,
+      comparisonNote: "Downgrading saves $10/seat/mo with only a 4% drop."
+    },
+    {
+      name: "Claude Sonnet 4",
+      currentPlan: "Max 20x",
+      suggestedPlan: "Pro",
+      accuracy: 95, speed: 88, cost: 72,
+      note: "Best for code generation with strong safety features.",
+      currentPrice: 200, suggestedPrice: 20,
+      currentPerformance: 95, suggestedPerformance: 85,
+      comparisonNote: "Max 20x is overkill. Pro gives 85% performance at 10% cost."
+    },
+    {
+      name: "Gemini Pro",
+      currentPlan: "Ultra",
+      suggestedPlan: "Pro",
+      accuracy: 80, speed: 92, cost: 95,
+      note: "Optimal for cost efficiency and multilingual support.",
+      currentPrice: 249, suggestedPrice: 19.99,
+      currentPerformance: 88, suggestedPerformance: 80,
+      comparisonNote: "Ultra is underutilised. Pro handles 90% of the same tasks."
+    },
+  ],
+  summary: "Your team is spending more than the optimal benchmark. Rebalancing seat allocation could recover the overspend.",
+  recommendations: ["💡 Consolidate seats", "💡 Downgrade idle plans", "💡 Switch heavy tasks to Gemini"]
 };
 
 export const plan_Data = async (req, res) => {
-    const { selected_plans, primary_use, team_size } = req.body;
+  const { selected_plans, primary_use, team_size } = req.body;
 
-    try {
-        const model = client.getGenerativeModel({
-            model: "gemini-2.5-flash",
-            systemInstruction: systemPrompt
-        });
+  try {
+    const model = client.getGenerativeModel({
+      model: "gemini-2.5-flash",
+      systemInstruction: systemPrompt,
+      generationConfig: {
+        responseMimeType: "application/json",
+      },
+    });
 
-        const aiResponse = await model.generateContent(`
+    const aiResponse = await model.generateContent(`
             Selected Plans: ${JSON.stringify(selected_plans)}
             Team Size: ${team_size}
             Primary Use: ${JSON.stringify(primary_use)}`);
 
-        const result = aiResponse ? JSON.parse(aiResponse.response.text()) : mockData;
+    const result = aiResponse ? JSON.parse(aiResponse.response.text()) : mockData;
 
-        const auditId = await insertAudit(result);
+    const auditId = await insertAudit(result);
 
-        res.status(200).json({ auditId, ...result });
+    res.status(200).json({ auditId, ...result });
 
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: error.message });
-    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
 };
 
 export const getAudit = async (req, res) => {
-    const { id } = req.params;
-    try {
-        const audit = await fetchAuditById(id);
-        res.status(200).json(audit);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: error.message });
-    }
+  const { id } = req.params;
+  try {
+    const audit = await fetchAuditById(id);
+    res.status(200).json(audit);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
 };
