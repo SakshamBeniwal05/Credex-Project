@@ -26,7 +26,7 @@ export default function FeaturesGrid() {
           /* Inline Instance of Independent Brutalist Card Frame */
           <div 
             key={i} 
-            className="bg-[#fcf5cc] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all p-6 flex flex-col gap-4 group"
+            className="bg-[#fcf5cc] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-0.5 transition-all p-6 flex flex-col gap-4 group"
           >
             <div className="mb-6">
               <span className="bg-black text-white p-2 font-mono text-xs tracking-wider">
