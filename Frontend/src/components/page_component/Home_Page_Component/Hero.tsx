@@ -6,15 +6,11 @@ export default function HeroSection() {
     };
 
     return (
-        <section className="relative bg-white py-20 px-8 border-b-2 border-black overflow-hidden text-black selection:bg-[#2563eb] selection:text-white antialiased">
+        <section className="relative w-5xl bg-transparent py-20 px-8 border-b-2 border-black overflow-hidden text-black selection:bg-[#2563eb] selection:text-white antialiased">
             {/* Stationery Grid Backdrop Pattern */}
-            <div
-                className="absolute inset-0 opacity-10 pointer-events-none"
-                style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', backgroundSize: '40px 40px' }}
-            />
 
             <div className="max-w-4xl mx-auto text-center relative z-10">
-                <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter leading-none mb-6">
+                <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter leading-none mb-6 flex flex-col">
                     Eliminate <span className="text-[#2563eb] underline decoration-4 underline-offset-8">AI Waste</span>
                 </h1>
 

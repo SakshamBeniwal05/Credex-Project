@@ -75,9 +75,6 @@ const AuditPage = () => {
     // ── SCREEN A: STATIONERY SCANNING LOADER ──
     if (status === "loading") return (
         <div className="min-h-screen bg-white relative flex flex-col items-center justify-center p-6 selection:bg-[#2563eb] selection:text-white text-black font-sans">
-            {/* Blueprint Blueprint Pattern */}
-            <div className="absolute inset-0 opacity-5 pointer-events-none" 
-                 style={{ backgroundImage: 'linear-gradient(#000 2px, transparent 2px), linear-gradient(90deg, #000 2px, transparent 2px)', backgroundSize: '30px 30px' }} />
             
             <div className="bg-[#fcf5cc] border-4 border-black p-10 max-w-md w-full shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative z-10 text-center">
                 <div className="w-16 h-16 border-4 border-black border-t-[#2563eb] rounded-none mx-auto animate-spin mb-6" />
@@ -104,8 +101,6 @@ const AuditPage = () => {
     // ── SCREEN B: RETRY INDEX PANEL ──
     if (status === "retry") return (
         <div className="min-h-screen bg-white relative flex flex-col items-center justify-center p-6 text-black font-sans">
-            <div className="absolute inset-0 opacity-5 pointer-events-none" 
-                 style={{ backgroundImage: 'linear-gradient(#000 2px, transparent 2px), linear-gradient(90deg, #000 2px, transparent 2px)', backgroundSize: '30px 30px' }} />
             
             <div className="bg-[#fcf5cc] border-4 border-black p-8 max-w-sm w-full shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] text-center">
                 <span className="inline-block bg-[#fbbf24] border-2 border-black text-xs font-mono font-bold px-3 py-1 uppercase mb-4 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
@@ -149,12 +144,9 @@ const AuditPage = () => {
 
     // ── MAIN CORE INTERACTIVE AUDIT DOCUMENT ──
     return (
-        <div className="min-h-screen bg-white text-black font-sans relative selection:bg-[#2563eb] selection:text-white antialiased pb-20">
-            {/* Structural Structural Graph Sheet Pattern */}
-            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
-                 style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+        <div className="min-h-screen bg-transparent text-black font-sans relative selection:bg-[#2563eb] selection:text-white antialiased pb-20">
 
-            <div className="max-w-5xl mx-auto px-6 pt-12 relative z-10">
+            <div className="max-w-6xl mx-auto px-6 pt-12 relative z-10">
                 
                 {/* File Header Block */}
                 <div className="border-b-4 border-black pb-6 mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">

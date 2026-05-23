@@ -14,8 +14,6 @@ const FinalPage = () => {
     // ── GUARD: STATIONERY LOADING STATE ──
     if (!result) return (
         <div className="min-h-screen bg-white relative flex flex-col items-center justify-center p-6 text-black font-sans">
-            <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
-                style={{ backgroundImage: 'linear-gradient(#000 2px, transparent 2px), linear-gradient(90deg, #000 2px, transparent 2px)', backgroundSize: '30px 30px' }} />
             <div className="bg-[#fcf5cc] border-4 border-black p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] text-center font-mono">
                 <div className="w-8 h-8 border-4 border-black border-t-[#2563eb] animate-spin mx-auto mb-4" />
                 <div className="text-xs font-black uppercase tracking-widest">LOADING AUDIT RESULT METRICS...</div>
@@ -66,7 +64,7 @@ const FinalPage = () => {
                         "Critical waste — immediate action required.";
 
     return (
-        <div className="min-h-screen bg-white text-black font-sans relative selection:bg-[#2563eb] selection:text-white antialiased py-12 px-4">
+        <div className="min-h-screen bg-transparent text-black font-sans relative selection:bg-[#2563eb] selection:text-white antialiased py-12 px-4">
             {/* Structural Graph Blueprint Background */}
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none print:hidden"
                 style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', backgroundSize: '24px 24px' }} />

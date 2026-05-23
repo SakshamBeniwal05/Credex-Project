@@ -37,7 +37,7 @@ export default function SEOAndFAQ() {
         </div>
         
         {/* Right Column: Highlighting Accordions */}
-        <div className="flex flex-col gap-1 border-t-2 border-black">
+        <div className="flex flex-col gap-1 border-t-2 border-black z-30 bg-white">
           {faqs.map((faq, i) => (
             <div key={i} className="border-b-2 border-black">
               <button 

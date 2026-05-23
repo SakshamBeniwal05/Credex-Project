@@ -11,18 +11,6 @@ const Home: FC = () => {
         <div className='w-full'>
             <div className='flex justify-center'>
                 <div className="w-3/4 relative">
-                    <div
-                        className="fixed inset-0 z-0"
-                        style={{
-                            backgroundImage: `
-                            linear-gradient(to right, #d1d5db 1px, transparent 1px),
-                            linear-gradient(to bottom, #d1d5db 1px, transparent 1px)
-                        `,
-                            backgroundSize: "32px 32px",
-                            WebkitMaskImage: "radial-gradient(ellipse 90% 90% at 50% 50%, #000 30%, transparent 70%)",
-                            maskImage: "radial-gradient(ellipse 90% 90% at 50% 50%, #000 30%, transparent 70%)",
-                        }}
-                    />
                     <Navbar />
                     <div className="relative z-10 w-full flex flex-col items-center justify-center gap-10">
                         <HeroSection />
