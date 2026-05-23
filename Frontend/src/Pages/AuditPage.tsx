@@ -39,12 +39,10 @@ const AuditPage = () => {
         if (primary_use) localStorage.setItem("primary_use", JSON.stringify(primary_use));
     }, [selected, team_size, primary_use]);
 
-    // Returns a numeric price if monthly price exists,
-    // otherwise a readable string for API/custom plans
     const resolvePlanPrice = (j: Plan): number | string => {
         if (typeof j.price_monthly === "number") return j.price_monthly;
         if (j.input_per_1M != null && j.output_per_1M != null) {
-            return `$${j.input_per_1M} input / $${j.output_per_1M} output per 1M tokens`;
+            return `$${j.input_per_1M} In / $${j.output_per_1M} Out`;
         }
         return "Custom";
     };
@@ -74,155 +72,235 @@ const AuditPage = () => {
         }
     };
 
-    // ── Loading screen ──
+    // ── SCREEN A: STATIONERY SCANNING LOADER ──
     if (status === "loading") return (
-        <div className="min-h-screen bg-[#f5f5f0] flex flex-col items-center justify-center gap-5">
-            <div className="flex flex-col items-center gap-4">
-                {/* Spinner */}
-                <div className="w-12 h-12 border-4 border-[#e5e5e0] border-t-amber-400 rounded-full animate-spin" />
-                <div className="text-lg font-bold text-[#111]">Preparing your audit...</div>
-                <div className="text-sm text-[#999] text-center max-w-xs">
-                    We're analyzing your AI subscriptions and calculating optimization opportunities.
+        <div className="min-h-screen bg-white relative flex flex-col items-center justify-center p-6 selection:bg-[#2563eb] selection:text-white text-black font-sans">
+            {/* Blueprint Blueprint Pattern */}
+            <div className="absolute inset-0 opacity-5 pointer-events-none" 
+                 style={{ backgroundImage: 'linear-gradient(#000 2px, transparent 2px), linear-gradient(90deg, #000 2px, transparent 2px)', backgroundSize: '30px 30px' }} />
+            
+            <div className="bg-[#fcf5cc] border-4 border-black p-10 max-w-md w-full shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative z-10 text-center">
+                <div className="w-16 h-16 border-4 border-black border-t-[#2563eb] rounded-none mx-auto animate-spin mb-6" />
+                
+                <h2 className="text-3xl font-black uppercase tracking-tight mb-2">RUNNING ANALYSIS</h2>
+                <p className="text-sm font-bold text-neutral-700 uppercase tracking-wide mb-8">
+                    Evaluating pricing vectors against resource matrix...
+                </p>
+
+                <div className="flex flex-col gap-3 text-left border-t-2 border-black pt-6 font-mono">
+                    {["Analyzing selected plans", "Calculating optimal spend", "Generating recommendations"].map((step, i) => (
+                        <div key={step} className="flex items-center gap-3">
+                            <div className="w-4 h-4 border-2 border-black bg-white flex items-center justify-center flex-shrink-0">
+                                <div className="w-2 h-2 bg-[#2563eb] animate-ping" style={{ animationDelay: `${i * 250}ms` }} />
+                            </div>
+                            <div className="text-xs font-bold uppercase">{step}...</div>
+                        </div>
+                    ))}
                 </div>
             </div>
-            <div className="flex flex-col gap-2 mt-4 w-64">
-                {["Analyzing selected plans", "Calculating optimal spend", "Generating recommendations"].map((step, i) => (
-                    <div key={step} className="flex items-center gap-3">
-                        <div className="w-5 h-5 rounded-full bg-[#fcf5cc] border border-amber-300 flex items-center justify-center flex-shrink-0">
-                            <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" style={{ animationDelay: `${i * 300}ms` }} />
-                        </div>
-                        <div className="text-xs text-[#888]">{step}</div>
-                    </div>
-                ))}
-            </div>
         </div>
     );
 
-    // ── Retry screen (503 / rate limit) ──
+    // ── SCREEN B: RETRY INDEX PANEL ──
     if (status === "retry") return (
-        <div className="min-h-screen bg-[#f5f5f0] flex flex-col items-center justify-center gap-5">
-            <div className="bg-white border border-[#e5e5e0] rounded-2xl p-8 max-w-sm w-full flex flex-col items-center gap-4 text-center">
-                <div className="text-4xl">⏳</div>
-                <div className="text-lg font-bold text-[#111]">AI is a little busy</div>
-                <div className="text-sm text-[#888]">{errorMsg}</div>
+        <div className="min-h-screen bg-white relative flex flex-col items-center justify-center p-6 text-black font-sans">
+            <div className="absolute inset-0 opacity-5 pointer-events-none" 
+                 style={{ backgroundImage: 'linear-gradient(#000 2px, transparent 2px), linear-gradient(90deg, #000 2px, transparent 2px)', backgroundSize: '30px 30px' }} />
+            
+            <div className="bg-[#fcf5cc] border-4 border-black p-8 max-w-sm w-full shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] text-center">
+                <span className="inline-block bg-[#fbbf24] border-2 border-black text-xs font-mono font-bold px-3 py-1 uppercase mb-4 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                    STATUS: 503 BUSY
+                </span>
+                <h3 className="text-2xl font-black uppercase tracking-tight mb-4">SYSTEM INK OVERFLOW</h3>
+                <p className="text-sm font-medium mb-6 leading-relaxed bg-white border-2 border-black p-3 font-mono">{errorMsg}</p>
+                
                 <button
                     onClick={() => { setStatus("idle"); setErrorMsg(""); }}
-                    className="bg-[#fcf5cc] hover:bg-[#e6e0bb] border border-[#e5e5e0] px-6 py-2.5 rounded-xl font-semibold text-sm transition-all duration-150 active:scale-95 w-full"
+                    className="w-full bg-[#fbbf24] text-black border-2 border-black font-black uppercase tracking-wider py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all text-sm"
                 >
-                    Retry
+                    Recalibrate & Retry
                 </button>
             </div>
         </div>
     );
 
-    // ── Error screen ──
+    // ── SCREEN C: CORE SYSTEM ERROR OVERLAY ──
     if (status === "error") return (
-        <div className="min-h-screen bg-[#f5f5f0] flex flex-col items-center justify-center gap-5">
-            <div className="bg-white border border-[#e5e5e0] rounded-2xl p-8 max-w-sm w-full flex flex-col items-center gap-4 text-center">
-                <div className="text-4xl">❌</div>
-                <div className="text-lg font-bold text-[#111]">Something went wrong</div>
-                <div className="text-sm text-[#888]">{errorMsg}</div>
+        <div className="min-h-screen bg-white relative flex flex-col items-center justify-center p-6 text-black font-sans">
+            <div className="absolute inset-0 opacity-5 pointer-events-none" 
+                 style={{ backgroundImage: 'linear-gradient(#000 2px, transparent 2px), linear-gradient(90deg, #000 2px, transparent 2px)', backgroundSize: '30px 30px' }} />
+            
+            <div className="bg-[#fcf5cc] border-4 border-black p-8 max-w-sm w-full shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] text-center">
+                <span className="inline-block bg-red-500 text-white border-2 border-black text-xs font-mono font-bold px-3 py-1 uppercase mb-4 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                    FATAL CORRUPTION
+                </span>
+                <h3 className="text-2xl font-black uppercase tracking-tight mb-4">COMPILATION FAULT</h3>
+                <p className="text-sm font-medium mb-6 leading-relaxed bg-white border-2 border-black p-3 font-mono text-red-600">{errorMsg}</p>
+                
                 <button
                     onClick={() => { setStatus("idle"); setErrorMsg(""); }}
-                    className="bg-[#fcf5cc] hover:bg-[#e6e0bb] border border-[#e5e5e0] px-6 py-2.5 rounded-xl font-semibold text-sm transition-all duration-150 active:scale-95 w-full"
+                    className="w-full bg-black text-white border-2 border-black font-black uppercase tracking-wider py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all text-sm"
                 >
-                    Go back & retry
+                    Reset Input Matrix
                 </button>
             </div>
         </div>
     );
 
-    // ── Main form ──
+    // ── MAIN CORE INTERACTIVE AUDIT DOCUMENT ──
     return (
-        <div className="h-screen flex justify-center">
-            <div className="w-2/3 my-5">
-                <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="min-h-screen bg-white text-black font-sans relative selection:bg-[#2563eb] selection:text-white antialiased pb-20">
+            {/* Structural Structural Graph Sheet Pattern */}
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
+                 style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
-                    {/* ── Section 1: Models ── */}
-                    <div className="text-lg font-bold text-[#111] mb-3">
-                        Tools you're subscribed to
+            <div className="max-w-5xl mx-auto px-6 pt-12 relative z-10">
+                
+                {/* File Header Block */}
+                <div className="border-b-4 border-black pb-6 mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+                    <div>
+                        <span className="bg-[#fbbf24] border-2 border-black text-xs font-mono font-black px-2.5 py-0.5 uppercase tracking-widest shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                            FORM // AUDIT_CORE_v1.0
+                        </span>
+                        <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter mt-2">
+                            Infrastructure Ledger
+                        </h1>
                     </div>
-                    {models?.map((i: Model) => (
-                        <div key={i.id} className="flex gap-10 p-2 items-center">
-                            <div className="flex gap-2 flex-col bg-[#fcf5cc] w-28 h-28 items-center justify-center p-2 rounded-2xl text-center">
-                                <div>
-                                    <img
-                                        src={i.image}
-                                        alt={i.product}
-                                        className={`${i.product === "OpenAI API" || i.product === "ChatGPT" ? "w-16" : "w-10"}`}
-                                    />
+                    <p className="font-mono text-xs text-neutral-500 font-bold uppercase tracking-wider">
+                        Date: May 2026 // Location: Local Storage Cache
+                    </p>
+                </div>
+
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-12">
+
+                    {/* ── SECTION 1: SUBSCRIPTION INVENTORY MATRIX ── */}
+                    <div className="bg-white border-2 border-black p-6 md:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+                        <div className="flex items-center gap-3 mb-6 border-b-2 border-black pb-4">
+                            <span className="bg-black text-white font-mono text-sm w-7 h-7 flex items-center justify-center font-bold">01</span>
+                            <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight">
+                                Subscription Inventory Active Matrix
+                            </h2>
+                        </div>
+                        
+                        <div className="space-y-8">
+                            {models?.map((i: Model) => (
+                                <div key={i.id} className="flex flex-col lg:flex-row gap-6 border-b-2 border-black border-dashed pb-8 last:border-b-0 last:pb-0 items-start lg:items-center">
+                                    
+                                    {/* Asset Node Label */}
+                                    <div className="bg-[#fcf5cc] border-2 border-black w-full lg:w-36 h-24 flex flex-row lg:flex-col gap-3 items-center justify-center p-3 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] shrink-0">
+                                        <img
+                                            src={i.image}
+                                            alt={i.product}
+                                            className={`object-contain ${i.product === "OpenAI API" || i.product === "ChatGPT" ? "w-12 h-12" : "w-8 h-8"}`}
+                                        />
+                                        <div className="font-black uppercase text-xs tracking-tight text-center truncate w-full">
+                                            {i.product}
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Dynamic Horizontally Swiping Radio Grid */}
+                                    <div className="flex gap-4 items-center overflow-x-auto w-full pb-3 scrollbar-thin">
+                                        {i.plans?.map((j: Plan) => (
+                                            <div key={j.id} className="relative shrink-0">
+                                                <input
+                                                    type="checkbox"
+                                                    className="peer hidden"
+                                                    value={JSON.stringify({
+                                                        model: i.product,
+                                                        plan: j.name,
+                                                        price_monthly: resolvePlanPrice(j)
+                                                    })}
+                                                    id={j.id}
+                                                    {...register("selected_plans")}
+                                                />
+                                                <label
+                                                    className="cursor-pointer block transition-all duration-200 bg-[#fcf5cc] border-2 border-black p-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] peer-checked:bg-[#2563eb] peer-checked:text-white peer-checked:shadow-none peer-checked:translate-x-[2px] peer-checked:translate-y-[2px]"
+                                                    htmlFor={j.id}
+                                                >
+                                                    <div className="bg-white text-black p-3 border border-black font-medium text-xs peer-checked:border-white">
+                                                        <PricingCard data={j} />
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        ))}
+                                    </div>
+
                                 </div>
-                                <div>{i.product}</div>
+                            ))}
+                        </div>
+                    </div>
+
+
+                    {/* ── TWO-COLUMN GRID ACCENT PIPELINE ── */}
+                    <div className="grid md:grid-cols-2 gap-8">
+                        
+                        {/* ── SECTION 2: TEAM SCALING PARAMETERS ── */}
+                        <div className="bg-white border-2 border-black p-6 md:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex flex-col justify-between">
+                            <div>
+                                <div className="flex items-center gap-3 mb-6 border-b-2 border-black pb-4">
+                                    <span className="bg-black text-white font-mono text-sm w-7 h-7 flex items-center justify-center font-bold">02</span>
+                                    <h2 className="text-xl font-black uppercase tracking-tight">
+                                        Human Resource Scope
+                                    </h2>
+                                </div>
+                                <p className="text-xs font-mono text-neutral-600 uppercase mb-4 leading-relaxed">
+                                    Declare active seat volume allocations to safely normalize concurrent licensing layers.
+                                </p>
                             </div>
-                            <div className="flex gap-5 items-center overflow-x-scroll">
-                                {i.plans?.map((j: Plan) => (
-                                    <div key={j.id} className="relative">
+                            <div className="relative mt-4">
+                                <input
+                                    type="number"
+                                    min={1}
+                                    placeholder="Seat Count Instance"
+                                    {...register("team_size")}
+                                    className="w-full bg-[#fcf5cc] border-2 border-black font-mono font-bold px-4 py-3 text-sm outline-none shadow-[inset_3px_3px_0px_0px_rgba(0,0,0,0.1)] focus:bg-white focus:border-[#2563eb] transition-all"
+                                />
+                                <span className="absolute right-3 top-3.5 font-mono text-xs text-neutral-400 pointer-events-none">SEATS</span>
+                            </div>
+                        </div>
+
+                        {/* ── SECTION 3: FUNCTIONAL LOAD UTILIZATION ── */}
+                        <div className="bg-white border-2 border-black p-6 md:p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+                            <div className="flex items-center gap-3 mb-6 border-b-2 border-black pb-4">
+                                <span className="bg-black text-white font-mono text-sm w-7 h-7 flex items-center justify-center font-bold">03</span>
+                                <h2 className="text-xl font-black uppercase tracking-tight">
+                                    Primary Vector Focus
+                                    </h2>
+                            </div>
+                            <p className="text-xs font-mono text-neutral-600 uppercase mb-6 leading-relaxed">
+                                Isolate operational usage context below to focus model re-routing suggestions.
+                            </p>
+                            <div className="flex flex-wrap gap-3">
+                                {purpose.map((use: string) => (
+                                    <div key={use} className="relative">
                                         <input
                                             type="checkbox"
+                                            id={use}
+                                            value={use}
                                             className="peer hidden"
-                                            value={JSON.stringify({
-                                                model: i.product,
-                                                plan: j.name,
-                                                price_monthly: resolvePlanPrice(j)
-                                            })}
-                                            id={j.id}
-                                            {...register("selected_plans")}
+                                            {...register("primary_use")}
                                         />
-                                        <label
-                                            className="cursor-pointer peer-checked:text-white transition-all duration-300 peer-checked:bg-blue-600 block bg-[#fcf5cc] rounded-2xl"
-                                            htmlFor={j.id}
+                                        <label 
+                                            htmlFor={use} 
+                                            className="inline-block px-5 py-2.5 bg-[#fcf5cc] border-2 border-black font-mono text-xs font-bold uppercase tracking-wider transition-all duration-150 cursor-pointer shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] peer-checked:bg-[#2563eb] peer-checked:text-white peer-checked:shadow-none peer-checked:translate-x-[2px] peer-checked:translate-y-[2px]"
                                         >
-                                            <PricingCard data={j} />
+                                            [{use}]
                                         </label>
                                     </div>
                                 ))}
                             </div>
                         </div>
-                    ))}
 
-                    {/* ── Section 2: Team Size ── */}
-                    <div className="text-lg font-bold text-[#111] mb-3 mt-8">
-                        How big is your team?
-                    </div>
-                    <div>
-                        <input
-                            type="number"
-                            min={1}
-                            placeholder="Team member count"
-                            {...register("team_size")}
-                            className="bg-[#fcf5cc] border border-[#e5e5e0] rounded-xl px-4 py-2.5 text-sm outline-none focus:border-amber-400"
-                        />
                     </div>
 
-                    {/* ── Section 3: Use Case ── */}
-                    <div className="text-lg font-bold text-[#111] mb-3 mt-8">
-                        What do you primarily use AI for?
-                    </div>
-                    <div className="flex gap-2">
-                        {purpose.map((use: string) => (
-                            <div key={use}>
-                                <input
-                                    type="checkbox"
-                                    id={use}
-                                    value={use}
-                                    className="peer hidden"
-                                    {...register("primary_use")}
-                                />
-                                <label htmlFor={use} className="px-4 py-2.5 bg-[#fcf5cc] border border-[#e5e5e0] rounded-xl text-sm font-medium peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition-all duration-200 cursor-pointer">
-                                    {use}
-                                </label>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* ── Submit ── */}
-                    <div className="flex items-center justify-center p-5">
+                    {/* ── TERMINAL SUBMIT ENGAGEMENT BAR ── */}
+                    <div className="border-t-4 border-black pt-8 flex justify-center">
                         <button
-                            className="block bg-[#fcf5cc] hover:bg-[#e6e0bb] w-76 p-2 rounded-3xl font-bold active:scale-95 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="bg-[#fbbf24] text-black border-4 border-black font-black uppercase text-xl tracking-wider py-4 px-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] active:bg-[#fcf5cc] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto"
                             type="submit"
                             disabled={status !== "idle"}
                         >
-                            Submit
+                            EXECUTE SUBSCRIPTION AUDIT
                         </button>
                     </div>
 

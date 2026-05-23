@@ -4,6 +4,7 @@ import How_It_Works from '../components/page_component/Home_Page_Component/How_I
 import FeaturesGrid from '../components/page_component/Home_Page_Component/Feature'
 import SEOAndFAQ from '../components/page_component/Home_Page_Component/SEO_FAQ'
 import Footer from '../components/page_component/Home_Page_Component/Footer'
+import Navbar from '../components/page_component/Major_Component/Navbar'
 
 const Home: FC = () => {
     return (
@@ -22,12 +23,13 @@ const Home: FC = () => {
                             maskImage: "radial-gradient(ellipse 90% 90% at 50% 50%, #000 30%, transparent 70%)",
                         }}
                     />
+                    <Navbar />
                     <div className="relative z-10 w-full flex flex-col items-center justify-center gap-10">
                         <HeroSection />
-                        <How_It_Works/>
-                        <FeaturesGrid/>
-                        <SEOAndFAQ/>
-                        <Footer/>
+                        <How_It_Works />
+                        <FeaturesGrid />
+                        <SEOAndFAQ />
+                        <Footer />
                     </div>
                 </div>
             </div>
