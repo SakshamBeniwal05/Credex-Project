@@ -1,7 +1,9 @@
 import type { FC } from 'react'
-import Skeleton_Doc from '../components/ui/Skeleton_Doc'
-import Hero from '../components/page_component/Home_Page_Component/Hero'
+import HeroSection from '../components/page_component/Home_Page_Component/Hero'
 import How_It_Works from '../components/page_component/Home_Page_Component/How_It_Works'
+import FeaturesGrid from '../components/page_component/Home_Page_Component/Feature'
+import SEOAndFAQ from '../components/page_component/Home_Page_Component/SEO_FAQ'
+import Footer from '../components/page_component/Home_Page_Component/Footer'
 
 const Home: FC = () => {
     return (
@@ -21,13 +23,11 @@ const Home: FC = () => {
                         }}
                     />
                     <div className="relative z-10 w-full flex flex-col items-center justify-center gap-10">
-                        <Hero />
-                        <div className=''>
-                            <How_It_Works />
-                        </div>
-                        <div className='bg-linear-to-b w-2/3 from-transparent to-white'>
-                            <Skeleton_Doc />
-                        </div>
+                        <HeroSection />
+                        <How_It_Works/>
+                        <FeaturesGrid/>
+                        <SEOAndFAQ/>
+                        <Footer/>
                     </div>
                 </div>
             </div>

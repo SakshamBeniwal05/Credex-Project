@@ -1,31 +1,51 @@
-const How_It_Works = () => {
+import React from 'react';
 
-  const working = [
-    { logo: "/pencil.png", title: "Input Tools", description: "Easily connect your current Al tools, team members, and primary usage details." },
-    { logo: "/maginying.png", title: "Analyze Spend", description: "The platform performs a deep analysis against an Al pricing database." },
-    { logo: "idea.png", title: "Get Recommendations", description: "Receive a spend health score and actionable insights for cost savings." }
-  ]
+export default function How_It_Works() {
+  // Localized Constants & Design System Assets
+
+  const steps = [
+    {
+      title: "Input Tools",
+      desc: "Easily connect your current AI tools, team members, and primary usage details.",
+      icon: "/pencil.png"
+    },
+    {
+      title: "Analyze Spend",
+      desc: "The platform performs a deep analysis against an AI pricing database.",
+      icon: "/maginying.png"
+    },
+    {
+      title: "Get Recommendations",
+      desc: "Receive a spend health score and actionable insights for cost savings.",
+      icon: "/idea.png"
+    }
+  ];
 
   return (
-    <div className="flex flex-col gap-10">
-      <div className="flex justify-center items-center text-4xl font-medium">How It Works</div>
-      <div className=" flex gap-10 justify-center lg:flex-row flex-col"> 
-        {working.map((e) => {
-          return (
-            <div className=" bg-[#FBF3CE] p-8 w-80 h-72 rounded-2xl flex flex-col gap-2 justify-center">
-              <div>
-                <img className="bg-transparent h-20" src={e.logo} />
-              </div>
-              <div className="flex flex-col gap-2">
-                <div className="text-xl font-bold">{e.title}</div>
-                <div className="text-lg font-medium">{e.description}</div>
-              </div>
+    <section id="HowItWorks" className="py-24 px-8 bg-white border-b-2 border-black text-black selection:bg-[#2563eb] selection:text-white antialiased">
+      <h2 className="text-4xl font-black uppercase text-center mb-16 italic underline decoration-[#fbbf24] decoration-4">
+        How it Works
+      </h2>
+      
+      <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        {steps.map((step, i) => (
+          /* Inline Instance of Independent Brutalist Card Frame */
+          <div 
+            key={i} 
+            className="bg-[#fcf5cc] border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all p-6 flex flex-col gap-4 group"
+          >
+            <div className="bg-white border-2 border-black p-3 w-fit shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] group-hover:bg-[#2563eb] transition-colors">
+              <img 
+                src={step.icon} 
+                alt={step.title} 
+                className="w-8 h-8 group-hover:invert transition-all" 
+              />
             </div>
-          )
-        })}
+            <h3 className="text-2xl font-black uppercase tracking-tight">{step.title}</h3>
+            <p className="font-medium leading-relaxed text-neutral-900">{step.desc}</p>
+          </div>
+        ))}
       </div>
-    </div>
-  )
+    </section>
+  );
 }
-
-export default How_It_Works
