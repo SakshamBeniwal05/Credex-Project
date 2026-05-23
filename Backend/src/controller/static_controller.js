@@ -56,6 +56,8 @@ const insertAudit = async (data) => {
         accuracy: toNum(m.accuracy),
         speed: toNum(m.speed),
 
+        note: m.note && m.note.trim() !== "" ? m.note : "Plan evaluation processed successfully.",
+
         // Map the AI's custom text note or string format straight to the text-typed cost column
         cost: m.cost != null ? String(m.cost) : null,
 
