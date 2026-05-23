@@ -25,7 +25,7 @@ export default function HeroSection() {
                 {/* Inline Instance of Primary Brutalist Action Button */}
                 <Link to={'/auditPage'}>
 
-                    <button className="px-10 py-4 text-lg font-bold uppercase tracking-wider transition-all bg-[#fbbf24] text-black border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]">
+                    <button className="px-10 py-4 text-lg font-bold uppercase tracking-wider transition-all bg-[#fbbf24] text-black border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-0.5">
                         Start Your Audit
                     </button>
                 </Link>

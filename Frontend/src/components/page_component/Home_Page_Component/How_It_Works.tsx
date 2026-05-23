@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function How_It_Works() {
   // Localized Constants & Design System Assets
 

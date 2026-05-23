@@ -116,7 +116,7 @@ const AuditPage = () => {
                 
                 <button
                     onClick={() => { setStatus("idle"); setErrorMsg(""); }}
-                    className="w-full bg-[#fbbf24] text-black border-2 border-black font-black uppercase tracking-wider py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all text-sm"
+                    className="w-full bg-[#fbbf24] text-black border-2 border-black font-black uppercase tracking-wider py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-0.5transition-all text-sm"
                 >
                     Recalibrate & Retry
                 </button>
@@ -139,7 +139,7 @@ const AuditPage = () => {
                 
                 <button
                     onClick={() => { setStatus("idle"); setErrorMsg(""); }}
-                    className="w-full bg-black text-white border-2 border-black font-black uppercase tracking-wider py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all text-sm"
+                    className="w-full bg-black text-white border-2 border-black font-black uppercase tracking-wider py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-none hover:translate-0.5 transition-all text-sm"
                 >
                     Reset Input Matrix
                 </button>
@@ -214,7 +214,7 @@ const AuditPage = () => {
                                                     {...register("selected_plans")}
                                                 />
                                                 <label
-                                                    className="cursor-pointer block transition-all duration-200 bg-[#fcf5cc] border-2 border-black p-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] peer-checked:bg-[#2563eb] peer-checked:text-white peer-checked:shadow-none peer-checked:translate-x-[2px] peer-checked:translate-y-[2px]"
+                                                    className="cursor-pointer block transition-all duration-200 bg-[#fcf5cc] border-2 border-black p-1 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] peer-checked:bg-[#2563eb] peer-checked:text-white peer-checked:shadow-none peer-checked:translate-0.5"
                                                     htmlFor={j.id}
                                                 >
                                                     <div className="bg-white text-black p-3 border border-black font-medium text-xs peer-checked:border-white">
@@ -282,7 +282,7 @@ const AuditPage = () => {
                                         />
                                         <label 
                                             htmlFor={use} 
-                                            className="inline-block px-5 py-2.5 bg-[#fcf5cc] border-2 border-black font-mono text-xs font-bold uppercase tracking-wider transition-all duration-150 cursor-pointer shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] peer-checked:bg-[#2563eb] peer-checked:text-white peer-checked:shadow-none peer-checked:translate-x-[2px] peer-checked:translate-y-[2px]"
+                                            className="inline-block px-5 py-2.5 bg-[#fcf5cc] border-2 border-black font-mono text-xs font-bold uppercase tracking-wider transition-all duration-150 cursor-pointer shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] peer-checked:bg-[#2563eb] peer-checked:text-white peer-checked:shadow-none peer-checked:translate-0.5"
                                         >
                                             [{use}]
                                         </label>
@@ -296,7 +296,7 @@ const AuditPage = () => {
                     {/* ── TERMINAL SUBMIT ENGAGEMENT BAR ── */}
                     <div className="border-t-4 border-black pt-8 flex justify-center">
                         <button
-                            className="bg-[#fbbf24] text-black border-4 border-black font-black uppercase text-xl tracking-wider py-4 px-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] active:bg-[#fcf5cc] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto"
+                            className="bg-[#fbbf24] text-black border-4 border-black font-black uppercase text-xl tracking-wider py-4 px-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-1 active:bg-[#fcf5cc] transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] w-full md:w-auto"
                             type="submit"
                             disabled={status !== "idle"}
                         >

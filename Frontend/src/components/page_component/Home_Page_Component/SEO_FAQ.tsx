@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export default function SEOAndFAQ() {
   const [openIndex, setOpenIndex] = useState(0);
