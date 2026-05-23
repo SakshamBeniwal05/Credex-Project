@@ -55,10 +55,15 @@ const insertAudit = async (data) => {
         suggestedPlan: m.suggestedPlan,
         accuracy: toNum(m.accuracy),
         speed: toNum(m.speed),
-        cost: toNum(m.cost),
-        note: m.note,
-        currentPrice: m.currentPrice != null ? String(m.currentPrice) : null,
-        suggestedPrice: m.suggestedPrice != null ? String(m.suggestedPrice) : null,
+
+        // Map the AI's custom text note or string format straight to the text-typed cost column
+        cost: m.cost != null ? String(m.cost) : null,
+
+        // Convert these directly to numbers or pass them cleanly. 
+        // Postgres will accept a numeric type directly or a string representing a pure number (e.g., "20.00").
+        currentPrice: m.currentPrice != null ? Number(m.currentPrice) : null,
+        suggestedPrice: m.suggestedPrice != null ? Number(m.suggestedPrice) : null,
+
         currentPerformance: toNum(m.currentPerformance),
         suggestedPerformance: toNum(m.suggestedPerformance),
         comparisonNote: m.comparisonNote,
@@ -127,12 +132,20 @@ You are an AI spending efficiency expert. A user has submitted their AI tool sub
 Your job is to analyze their current spending and return a JSON audit report.
 
 You will receive:
-- selected_plans: array of objects like { model, plan, price_monthly }
 - team_size: number of people in the team
 - primary_use: array of use cases like ["coding", "writing", "research"]
+- selected_plans: array of objects containing these strict schema data types:
+    {
+       "model": string,
+       "plan": string,
+       "price_monthly": number,       // Flat monthly price, or 0 for API models
+       "is_api": boolean,             // true if plan is usage-based token consumption
+       "input_per_1m": number,        // input token price rate per million (0 if flat)
+       "output_per_1m": number        // output token price rate per million (0 if flat)
+    }
 
-IMPORTANT: price_monthly may be a number (e.g. 20) for flat monthly plans, OR a string
-(e.g. "$1 input / $5 output per 1M tokens") for API/usage-based plans. Handle both.
+IMPORTANT: price_monthly is always a number. For flat plans it is the monthly cost (e.g. 20).
+For API/usage-based plans it is 0 — use input_per_1m and output_per_1m for cost analysis instead.
 
 You must return ONLY a valid JSON object — no explanation, no markdown, no backticks. Just raw JSON.
 
@@ -151,10 +164,10 @@ The JSON must follow this exact structure:
       "isOptimal": <boolean>,
       "accuracy": <0–100>,
       "speed": <0–100>,
-      "cost": <0–100>,
+      "cost": <string — exact pricing context e.g. "$1 In / $5 Out per 1M" for API plans, or "$20/mo" for flat plans>,
       "note": <one sentence on this model's fit for their use case>,
-      "currentPrice": <string or number — the price as received in price_monthly. For flat plans use the number. For API plans use the token pricing string as-is>,
-      "suggestedPrice": <string or number — same format as currentPrice. Must match the AVAILABLE PLANS list. If isOptimal, repeat currentPrice>,
+      "currentPrice": <number — for flat plans: the exact monthly cost (e.g. 20). For API plans: the input token price per 1M tokens as a number (e.g. 1.0)>,
+      "suggestedPrice": <number — same format as currentPrice. Must match the AVAILABLE PLANS list. If isOptimal, repeat currentPrice>,
       "currentPerformance": <0–100>,
       "suggestedPerformance": <0–100 — same as currentPerformance if isOptimal=true>,
       "comparisonNote": <if isOptimal=true: "This plan is optimal for your team size and use case." else: one sentence why the suggested plan is better>
@@ -254,7 +267,7 @@ RULES:
 - ONLY suggest plans from the AVAILABLE PLANS list above
 - NEVER suggest a plan from a different vendor
 - NEVER suggest a plan that costs more than the current one
-- suggestedPrice must exactly match the price in the AVAILABLE PLANS list
+- suggestedPrice must exactly match the numeric price in the AVAILABLE PLANS list
 - Do not manufacture savings — if optimal, say so honestly
 
 above500:
