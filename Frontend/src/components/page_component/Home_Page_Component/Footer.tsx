@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function Footer() {
   // Localized Constants & Design System Assets
   const ASSETS = {

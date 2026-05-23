@@ -1,9 +1,5 @@
 
 export default function Navbar() {
-    // Localized Constants & Design System Assets
-    const ASSETS = {
-        LOGO: "{{DATA:IMAGE:IMAGE_15}}",
-    };
 
     return (
         <nav className="flex justify-between items-center py-6 px-8 border-b-2 border-black bg-white sticky top-0 z-50 text-black selection:bg-[#2563eb] selection:text-white antialiased">
